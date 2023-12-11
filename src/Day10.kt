@@ -1,4 +1,5 @@
 import java.util.*
+import kotlin.math.abs
 
 fun main() {
 
@@ -11,8 +12,8 @@ fun main() {
     val FLOOR = '.'
     val START = 'S'
 
-    val xDirs = arrayOf(-1, 0, 1, 0)
-    val yDirs = arrayOf(0, 1, 0, -1)
+    val xDirs = arrayOf(0, 1, 0, -1)
+    val yDirs = arrayOf(1, 0, -1, 0)
 
     val nextPos = mapOf<Char, (prevPos: Point, currentPos: Point) -> Point?>(
         LEFT_TOP to { prev, current ->
@@ -60,7 +61,7 @@ fun main() {
         FLOOR to { _, _ -> null }
     )
 
-    fun getShape(input: List<String>): Array<BooleanArray> {
+    fun getPath(input: List<String>): List<Point> {
         val x = input.indexOfFirst { it.contains(START) }
         val y = input[x].indexOf(START)
 
@@ -70,13 +71,17 @@ fun main() {
             }
         }
 
-        val queue: Queue<Pair<Point, Point>> = LinkedList()
+        val stack: Stack<Pair<Point, Point>> = Stack()
 
-        queue += Point(-1, -1) to Point(x, y)
+        stack += Point(-1, -1) to Point(x, y)
         used[x][y] = true
 
-        while (queue.isNotEmpty()) {
-            val (pre, curr) = queue.poll()
+        val path = mutableListOf<Point>()
+
+        while (stack.isNotEmpty()) {
+            val (pre, curr) = stack.pop()
+
+            path.add(curr)
 
             val char = input[curr.x][curr.y]
 
@@ -106,25 +111,41 @@ fun main() {
                         input[it.x][it.y] != FLOOR
             }.forEach {
                 used[it.x][it.y] = true
-                queue += curr to it
+                stack += curr to it
             }
         }
 
-        return used
+        return path
     }
 
     fun part1(input: List<String>): Int {
-        val shape = getShape(input)
-        val perimeter = shape.sumOf {
-            it.count { it }
-        }
+        val path = getPath(input)
 
-        return perimeter / 2
+        return path.size / 2
     }
 
+    fun calculateArea(path: List<Point>): Double {
+        val sum = path.indices.sumOf {
+            val current = path[it]
+            val next = path[(it + 1) % path.size]
 
-    fun part2(input: List<String>): Int {
-        return 0
+            (current.y + next.y) * (current.x - next.x)
+        }
+
+        return abs(sum) / 2.0
+    }
+
+    fun getInnerPoints(outPoints: Int, area: Double): Double {
+        return (area - outPoints / 2.0 + 1)
+    }
+
+    fun part2(input: List<String>): Double {
+        val path = getPath(input)
+        val area = calculateArea(path)
+
+        val innerPoints = getInnerPoints(path.size, area)
+
+        return innerPoints
     }
 
     val input = readInput("Day10")
