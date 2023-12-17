@@ -24,6 +24,7 @@ fun main() {
                     current.copy(x = current.x - 1) to Dir.UP,
                     current.copy(x = current.x + 1) to Dir.DOWN,
                 )
+                else -> emptyList()
             }
 
             HORIZONTAL -> when (lastDir) {
@@ -39,6 +40,7 @@ fun main() {
                     current.copy(y = current.y - 1) to Dir.LEFT,
                     current.copy(y = current.y + 1) to Dir.RIGHT,
                 )
+                else -> emptyList()
             }
 
             PLUS_90 -> when (lastDir) {
@@ -54,6 +56,7 @@ fun main() {
                 Dir.LEFT -> listOf(
                     current.copy(x = current.x - 1) to Dir.UP
                 )
+                else -> emptyList()
             }
 
             MINUS_90 -> when (lastDir) {
@@ -69,6 +72,7 @@ fun main() {
                 Dir.LEFT -> listOf(
                     current.copy(x = current.x + 1) to Dir.DOWN
                 )
+                else -> emptyList()
             }
 
             FLOOR -> when (lastDir) {
@@ -84,6 +88,7 @@ fun main() {
                 Dir.LEFT -> listOf(
                     current.copy(y = current.y - 1) to lastDir
                 )
+                else -> emptyList()
             }
 
             else -> emptyList()
@@ -152,5 +157,5 @@ fun main() {
 }
 
 enum class Dir {
-    UP, RIGHT, DOWN, LEFT
+    UP, RIGHT, DOWN, LEFT, NO_DIRECTION
 }
