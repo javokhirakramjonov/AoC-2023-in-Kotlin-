@@ -4,7 +4,7 @@ import kotlin.collections.HashSet
 fun main() {
 
     fun part1(input: List<String>): Int {
-        var limit = 65
+        var limit = 64
 
         val queue: Queue<Pair<Point, Char>> = LinkedList()
 
@@ -50,8 +50,6 @@ fun main() {
 
             if (limit-- == 0) break
         }
-
-        println(map.joinToString("\n") { it.joinToString(" ") })
 
         return map.sumOf {
             it.count { it == 'O' }
