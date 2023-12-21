@@ -55,3 +55,18 @@ inline fun <reified T> `rotate -90 Degree`(arr: Array<Array<T>>) : Array<Array<T
 
     return newArr
 }
+
+fun calculateLCM(a: Long, b: Long): Long {
+    return a * b / calculateGCD(a, b)
+}
+
+fun calculateGCD(a: Long, b: Long): Long {
+    var num1 = a
+    var num2 = b
+    while (num2 != 0L) {
+        val temp = num2
+        num2 = num1 % num2
+        num1 = temp
+    }
+    return num1
+}
